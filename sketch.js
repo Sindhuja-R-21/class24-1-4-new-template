@@ -1,20 +1,21 @@
+
 const Engine = Matter.Engine;
 const World = Matter.World;
-
-//To create PE body- rectangle,circle,polygon
 const Bodies = Matter.Bodies;
 
-//To give external properties-velocity,force..,
+//give properties to PE Body
 const Body = Matter.Body;
 
-var button;
+var myengine,myworld;
+var ground,ball,ground1;
+
 var angle=60;
 
 function setup() {
   createCanvas(400,400);
 
-  engine = Engine.create();
-  world = engine.world;
+  myengine = Engine.create();
+  myworld = myengine.world;
   
    var ball_options = {
     restitution: 0.95,
@@ -28,48 +29,53 @@ function setup() {
   
 
   ground = Bodies.rectangle(100,400,400,20,ground_options);
-  World.add(world,ground);
+  World.add(myworld,ground);
 
   ball = Bodies.circle(100,10,20,ball_options);
-  World.add(world,ball);
+  World.add(myworld,ball);
   
-  button=createImg("up.png");
-  button.position(30,40);
-  button.size(50,50);
-  button.mouseClicked(vForce)
-
   ground1=Bodies.rectangle(100,250,100,20,ground_options);
-  World.add(world,ground1)
+  World.add(myworld,ground1);
+  
 
-
-
+  
 }
 
 
 function draw() 
 {
   background(51);
-  Engine.update(engine);
-
+  Engine.update(myengine);
+  
+ 
+  
   rectMode(CENTER);
   ellipseMode(RADIUS);
-  
-  ellipse(ball.position.x,ball.position.y,20);
-  push();
-  fill("brown")
-  rect(ground.position.x,ground.position.y,400,20);
+
+  //captures all new setting
+  push(); 
+    fill("red");
+    ellipse(ball.position.x,ball.position.y,20);
+  //reverts back to original setting
   pop();
 
-  //Rotate
   push();
-  fill("red");
-  rotate(angle);
-  translate(ground1.position.x,ground1.position.y);
-  rect(0,0,100,20);
+    fill("green");
+    rect(ground.position.x,ground.position.y,500,20);
   pop();
+
+
+    Matter.Body.rotate(ground1,angle)
+
+    push();
+      fill("yellow");
+      translate(ground1.position.x,ground1.position.y);
+      rotate(angle);
+      rect(0,0,100,20);
+    pop();
+
+  angle=angle+0.1
+   
 }
 
-function vForce(){ //Y direction 
-  //Matter.Body.applyForce(body, position, force)
-   Matter.Body.applyForce(ball,{x:0,y:0},{x:0,y:-0.05})
-}
+
